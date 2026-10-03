@@ -83,19 +83,3 @@ dotnet test tests/Target.Desafio.Tests/Target.Desafio.Tests.csproj --configurati
 ```
 
 Os testes cobrem os limites R$ 100/R$ 500, arredondamento, agrupamento por vendedor, entrada/saída, saldo insuficiente, entradas inválidas, IDs distintos, persistência e juros antes/no/depois do vencimento.
-
-## Publicar no GitHub
-
-Crie um repositório vazio, por exemplo `desafio-target-csharp`, e execute na raiz deste projeto (substitua `SEU_USUARIO`):
-
-```sh
-git init -b main
-git add .
-git commit -m "Implementa desafio Target em C# com testes"
-git remote add origin https://github.com/SEU_USUARIO/desafio-target-csharp.git
-git push -u origin main
-```
-
-Se este projeto já estiver inicializado e possuir o commit, execute somente os dois últimos comandos. Confira o resultado do GitHub Actions antes de entregar o link.
-
-O e-mail informa um prazo com marcador `XX/XX/XXXX`; confirme a data com a equipe. A entrega solicitada é responder ao mesmo e-mail com o link do repositório.
