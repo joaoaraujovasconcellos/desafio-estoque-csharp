@@ -2,7 +2,18 @@
 
 Aplicação de console em **C# / .NET 8** que resolve os três exercícios do desafio para Desenvolvedor/a de Sistemas Jr.
 
-## Executar
+## Executar sem instalar .NET (Windows 64 bits)
+
+1. Acesse [Releases](https://github.com/joaoaraujovasconcellos/desafio-target-csharp/releases/latest).
+2. Baixe **desafio-target-win-x64.zip** na seção **Assets**.
+3. Extraia todo o ZIP para uma pasta no computador.
+4. Dê dois cliques em **Target.Desafio.exe** e escolha uma opção no menu.
+
+O pacote inclui o runtime do .NET e os JSONs do exercício. Não precisa instalar SDK nem .NET. Mantenha todos os arquivos extraídos juntos, incluindo a pasta `dados`. O saldo e o histórico de estoque são salvos na pasta `estado` do diretório de execução; extraia em uma pasta onde tenha permissão de escrita.
+
+Para testar: consulte as comissões pela opção 1; na opção 2, registre uma entrada de 10 unidades para o produto 101 (saldo inicial 150, saldo final 160); na opção 3, informe um valor e uma data vencida para calcular os juros.
+
+## Executar pelo código-fonte
 
 Pré-requisito: [.NET SDK 8](https://dotnet.microsoft.com/pt-br/download/dotnet/8.0) ou SDK compatível com `net8.0`. Somente o runtime não permite compilar.
 
@@ -83,3 +94,11 @@ dotnet test tests/Target.Desafio.Tests/Target.Desafio.Tests.csproj --configurati
 ```
 
 Os testes cobrem os limites R$ 100/R$ 500, arredondamento, agrupamento por vendedor, entrada/saída, saldo insuficiente, entradas inválidas, IDs distintos, persistência e juros antes/no/depois do vencimento.
+
+## Gerar a versão para Windows
+
+```sh
+dotnet publish src/Target.Desafio/Target.Desafio.csproj --configuration Release --runtime win-x64 --self-contained true --output publish/win-x64
+```
+
+Compacte todo o conteúdo de `publish/win-x64` para distribuir. Essa versão contém o runtime e executa diretamente pelo arquivo `Target.Desafio.exe`.
