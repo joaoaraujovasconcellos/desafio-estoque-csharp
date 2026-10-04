@@ -3,11 +3,13 @@ using System.Text.Json;
 namespace Target.Desafio;
 
 public sealed record Produto(int CodigoProduto, string DescricaoProduto, int Estoque);
-public sealed record DadosEstoque(List<Produto> Estoque);
+public sealed record DadosEstoque([property: System.Text.Json.Serialization.JsonRequired] List<Produto> Estoque);
 public enum TipoMovimentacao { Entrada, Saida }
 public sealed record Movimentacao(Guid Id, int CodigoProduto, TipoMovimentacao Tipo,
     string Descricao, int Quantidade, int EstoqueAnterior, int EstoqueFinal, DateTimeOffset Data);
-public sealed record EstadoEstoque(List<Produto> Produtos, List<Movimentacao> Movimentacoes);
+public sealed record EstadoEstoque(
+    [property: System.Text.Json.Serialization.JsonRequired] List<Produto> Produtos,
+    [property: System.Text.Json.Serialization.JsonRequired] List<Movimentacao> Movimentacoes);
 
 public sealed class ControleEstoque
 {
@@ -18,11 +20,14 @@ public sealed class ControleEstoque
 
     public ControleEstoque(IEnumerable<Produto> produtos, IEnumerable<Movimentacao>? historico = null)
     {
+        ArgumentNullException.ThrowIfNull(produtos);
         this.produtos = produtos.ToList();
         movimentacoes = historico?.ToList() ?? [];
-        if (this.produtos.Any(p => p.CodigoProduto <= 0 || p.Estoque < 0 || string.IsNullOrWhiteSpace(p.DescricaoProduto))
+        if (this.produtos.Any(p => p is null || p.CodigoProduto <= 0 || p.Estoque < 0 || string.IsNullOrWhiteSpace(p.DescricaoProduto))
             || this.produtos.Select(p => p.CodigoProduto).Distinct().Count() != this.produtos.Count)
             throw new ArgumentException("Cadastro de produtos inválido.");
+        if (movimentacoes.Any(m => m is null))
+            throw new ArgumentException("Histórico de movimentações inválido.");
     }
 
     public Movimentacao Movimentar(int codigo, TipoMovimentacao tipo, int quantidade, string descricao)

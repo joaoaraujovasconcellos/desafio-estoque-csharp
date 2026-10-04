@@ -84,5 +84,7 @@ void Estoque()
 ControleEstoque CarregarEstado()
 {
     var salvo = Arquivos.Ler<EstadoEstoque>(estado);
+    if (salvo.Movimentacoes is null)
+        throw new JsonException("O estado deve informar a lista de movimentações.");
     return new ControleEstoque(salvo.Produtos, salvo.Movimentacoes);
 }

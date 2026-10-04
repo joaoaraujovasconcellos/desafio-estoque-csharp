@@ -54,6 +54,8 @@ Exemplo: entrada de 10 canetas no produto 101 altera o saldo de 150 para 160. Um
 
 Rejeita produto desconhecido, quantidades menores ou iguais a zero, descrição vazia, tipo inválido e saída maior que o estoque disponível. A alteração inválida não modifica saldo nem histórico.
 
+Os arquivos JSON devem conter as listas esperadas (`vendas`, `estoque` ou `produtos` e `movimentacoes`, conforme o arquivo). Listas obrigatórias ausentes ou nulas e itens nulos são rejeitados com uma mensagem de erro no menu. Uma lista vazia é permitida.
+
 Após uma movimentação, salva saldo e histórico juntos em `estado/estoque.json`, relativo ao diretório em que o comando foi executado. Escreve primeiro em arquivo temporário e substitui o arquivo final somente depois da escrita. O estado é ignorado pelo Git. Se houver erro ao salvar, a operação não é anunciada como concluída; o próximo acesso recarrega o estado do disco.
 
 O arquivo de estado prevalece sobre o cadastro inicial nas próximas execuções. Para reiniciar a demonstração, faça uma cópia do histórico e remova **somente o arquivo de estado**. A persistência foi projetada para uma única instância da aplicação; não há coordenação entre processos simultâneos.
@@ -93,7 +95,7 @@ dotnet build src/Target.Desafio/Target.Desafio.csproj --configuration Release
 dotnet test tests/Target.Desafio.Tests/Target.Desafio.Tests.csproj --configuration Release
 ```
 
-Os testes cobrem os limites R$ 100/R$ 500, arredondamento, agrupamento por vendedor, entrada/saída, saldo insuficiente, entradas inválidas, IDs distintos, persistência e juros antes/no/depois do vencimento.
+Os testes cobrem os limites R$ 100/R$ 500, arredondamento, agrupamento por vendedor, entrada/saída, saldo insuficiente, entradas inválidas, tipo inválido, overflow de saldo, listas obrigatórias ausentes, itens nulos, IDs distintos, persistência e juros antes/no/depois do vencimento.
 
 ## Gerar a versão para Windows
 

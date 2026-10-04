@@ -5,6 +5,49 @@ namespace Target.Desafio.Tests;
 
 public class RegrasTests
 {
+    [Fact]
+    public void VendasNulasSaoRejeitadas()
+    {
+        Assert.Throws<ArgumentNullException>(() => CalculadoraComissao.Calcular(null!));
+        Assert.Throws<ArgumentException>(() => CalculadoraComissao.Calcular([null!]));
+    }
+
+    [Fact]
+    public void CadastroEHistoricoComItensNulosSaoRejeitados()
+    {
+        Assert.Throws<ArgumentNullException>(() => new ControleEstoque(null!));
+        Assert.Throws<ArgumentException>(() => new ControleEstoque([null!]));
+        Assert.Throws<ArgumentException>(() => new ControleEstoque([new Produto(101, "Caneta", 1)], [null!]));
+    }
+
+    [Fact]
+    public void JsonExigeListasDeDadosEHistorico()
+    {
+        Assert.Throws<System.Text.Json.JsonException>(() =>
+            System.Text.Json.JsonSerializer.Deserialize<DadosVendas>("{}", Arquivos.Opcoes));
+        Assert.Throws<System.Text.Json.JsonException>(() =>
+            System.Text.Json.JsonSerializer.Deserialize<DadosEstoque>("{}", Arquivos.Opcoes));
+        Assert.Throws<System.Text.Json.JsonException>(() =>
+            System.Text.Json.JsonSerializer.Deserialize<EstadoEstoque>("{\"produtos\":[]}", Arquivos.Opcoes));
+        Assert.Throws<System.Text.Json.JsonException>(() =>
+            System.Text.Json.JsonSerializer.Deserialize<EstadoEstoque>("{\"movimentacoes\":[]}", Arquivos.Opcoes));
+        var vazio = System.Text.Json.JsonSerializer.Deserialize<EstadoEstoque>(
+            "{\"produtos\":[],\"movimentacoes\":[]}", Arquivos.Opcoes);
+        Assert.NotNull(vazio);
+        Assert.Empty(vazio.Produtos);
+        Assert.Empty(vazio.Movimentacoes);
+    }
+
+    [Fact]
+    public void TipoInvalidoEOverflowNaoAlteramEstoque()
+    {
+        var estoque = new ControleEstoque([new Produto(101, "Caneta", int.MaxValue)]);
+        Assert.Throws<ArgumentException>(() => estoque.Movimentar(101, (TipoMovimentacao)99, 1, "Compra"));
+        Assert.Throws<OverflowException>(() => estoque.Movimentar(101, TipoMovimentacao.Entrada, 1, "Compra"));
+        Assert.Equal(int.MaxValue, Assert.Single(estoque.Produtos).Estoque);
+        Assert.Empty(estoque.Movimentacoes);
+    }
+
     [Theory]
     [InlineData("99.99", "0")]
     [InlineData("100", "1")]

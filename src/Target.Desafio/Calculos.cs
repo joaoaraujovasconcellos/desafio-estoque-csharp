@@ -1,7 +1,7 @@
 namespace Target.Desafio;
 
 public sealed record Venda(string Vendedor, decimal Valor);
-public sealed record DadosVendas(List<Venda> Vendas);
+public sealed record DadosVendas([property: System.Text.Json.Serialization.JsonRequired] List<Venda> Vendas);
 public sealed record Comissao(string Vendedor, decimal TotalVendas, decimal TotalComissao);
 
 public static class CalculadoraComissao
@@ -15,8 +15,9 @@ public static class CalculadoraComissao
 
     public static IReadOnlyList<Comissao> Calcular(IEnumerable<Venda> vendas)
     {
+        ArgumentNullException.ThrowIfNull(vendas);
         var lista = vendas.ToList();
-        if (lista.Any(v => string.IsNullOrWhiteSpace(v.Vendedor)))
+        if (lista.Any(v => v is null || string.IsNullOrWhiteSpace(v.Vendedor)))
             throw new ArgumentException("Toda venda deve informar o vendedor.");
         return lista.GroupBy(v => v.Vendedor.Trim(), StringComparer.OrdinalIgnoreCase)
             .Select(g => new Comissao(g.Key, g.Sum(v => v.Valor), g.Sum(v => PorVenda(v.Valor))))
