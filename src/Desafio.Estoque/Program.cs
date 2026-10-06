@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Text;
 using System.Text.Json;
-using Target.Desafio;
+using Desafio.Estoque;
 
 Console.OutputEncoding = Encoding.UTF8;
 var cultura = CultureInfo.GetCultureInfo("pt-BR");
@@ -10,7 +10,7 @@ var estado = Path.Combine(Environment.CurrentDirectory, "estado", "estoque.json"
 
 while (true)
 {
-    Console.WriteLine("\nDESAFIO TARGET — 1 Comissões | 2 Estoque | 3 Juros | 0 Sair");
+    Console.WriteLine("\nDESAFIO ESTOQUE C# — 1 Comissões | 2 Estoque | 3 Juros | 0 Sair");
     var opcao = Console.ReadLine();
     if (opcao is null or "0") break;
     try

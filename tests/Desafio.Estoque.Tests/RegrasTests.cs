@@ -1,7 +1,7 @@
-using Target.Desafio;
+using Desafio.Estoque;
 using Xunit;
 
-namespace Target.Desafio.Tests;
+namespace Desafio.Estoque.Tests;
 
 public class RegrasTests
 {
@@ -97,7 +97,7 @@ public class RegrasTests
     [Fact]
     public void PersistenciaMantemSaldoEHistorico()
     {
-        var pasta = Path.Combine(Path.GetTempPath(), "target-tests-" + Guid.NewGuid());
+        var pasta = Path.Combine(Path.GetTempPath(), "estoque-tests-" + Guid.NewGuid());
         var caminho = Path.Combine(pasta, "estoque.json");
         try
         {

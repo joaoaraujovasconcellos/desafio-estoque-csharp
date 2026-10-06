@@ -1,4 +1,4 @@
-namespace Target.Desafio;
+namespace Desafio.Estoque;
 
 public sealed record Venda(string Vendedor, decimal Valor);
 public sealed record DadosVendas([property: System.Text.Json.Serialization.JsonRequired] List<Venda> Vendas);

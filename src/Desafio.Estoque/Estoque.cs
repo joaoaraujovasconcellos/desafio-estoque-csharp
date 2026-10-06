@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace Target.Desafio;
+namespace Desafio.Estoque;
 
 public sealed record Produto(int CodigoProduto, string DescricaoProduto, int Estoque);
 public sealed record DadosEstoque([property: System.Text.Json.Serialization.JsonRequired] List<Produto> Estoque);

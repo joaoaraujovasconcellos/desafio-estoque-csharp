@@ -1,13 +1,13 @@
-# Desafio técnico — Target Sistemas
+# Desafio Estoque C#
 
-Aplicação de console em **C# / .NET 8** que resolve os três exercícios do desafio para Desenvolvedor/a de Sistemas Jr.
+Aplicação de console em **C# / .NET 8** com controle de estoque, cálculo de comissões e juros por atraso.
 
 ## Executar sem instalar .NET (Windows 64 bits)
 
-1. Acesse [Releases](https://github.com/joaoaraujovasconcellos/desafio-target-csharp/releases/latest).
-2. Baixe **desafio-target-win-x64.zip** na seção **Assets**.
+1. Acesse [Releases](https://github.com/joaoaraujovasconcellos/desafio-estoque-csharp/releases/latest).
+2. Baixe **desafio-estoque-win-x64.zip** na seção **Assets**.
 3. Extraia todo o ZIP para uma pasta no computador.
-4. Dê dois cliques em **Target.Desafio.exe** e escolha uma opção no menu.
+4. Dê dois cliques em **Desafio.Estoque.exe** e escolha uma opção no menu.
 
 O pacote inclui o runtime do .NET e os JSONs do exercício. Não precisa instalar SDK nem .NET. Mantenha todos os arquivos extraídos juntos, incluindo a pasta `dados`. O saldo e o histórico de estoque são salvos na pasta `estado` do diretório de execução; extraia em uma pasta onde tenha permissão de escrita.
 
@@ -20,7 +20,7 @@ Pré-requisito: [.NET SDK 8](https://dotnet.microsoft.com/pt-br/download/dotnet/
 Na raiz do repositório:
 
 ```sh
-dotnet run --project src/Target.Desafio
+dotnet run --project src/Desafio.Estoque
 ```
 
 O menu apresenta comissões, estoque, juros e saída. A aplicação não depende de banco de dados nem de serviços externos.
@@ -78,11 +78,11 @@ O dia do vencimento não gera juros. Vencimento futuro também não. O valor dos
 
 ```text
 dados/                         JSONs originais do enunciado
-src/Target.Desafio/
+src/Desafio.Estoque/
   Program.cs                   Menu e entrada/saída de console
   Calculos.cs                  Regras de comissões e juros
   Estoque.cs                   Regras de estoque e persistência JSON
-tests/Target.Desafio.Tests/     Testes automatizados xUnit
+tests/Desafio.Estoque.Tests/     Testes automatizados xUnit
 .github/workflows/ci.yml        Build e testes no GitHub Actions
 ```
 
@@ -91,8 +91,8 @@ As regras ficam separadas da interface para serem testadas sem simular o console
 ## Validar
 
 ```sh
-dotnet build src/Target.Desafio/Target.Desafio.csproj --configuration Release
-dotnet test tests/Target.Desafio.Tests/Target.Desafio.Tests.csproj --configuration Release
+dotnet build src/Desafio.Estoque/Desafio.Estoque.csproj --configuration Release
+dotnet test tests/Desafio.Estoque.Tests/Desafio.Estoque.Tests.csproj --configuration Release
 ```
 
 Os testes cobrem os limites R$ 100/R$ 500, arredondamento, agrupamento por vendedor, entrada/saída, saldo insuficiente, entradas inválidas, tipo inválido, overflow de saldo, listas obrigatórias ausentes, itens nulos, IDs distintos, persistência e juros antes/no/depois do vencimento.
@@ -100,7 +100,7 @@ Os testes cobrem os limites R$ 100/R$ 500, arredondamento, agrupamento por vende
 ## Gerar a versão para Windows
 
 ```sh
-dotnet publish src/Target.Desafio/Target.Desafio.csproj --configuration Release --runtime win-x64 --self-contained true --output publish/win-x64
+dotnet publish src/Desafio.Estoque/Desafio.Estoque.csproj --configuration Release --runtime win-x64 --self-contained true --output publish/win-x64
 ```
 
-Compacte todo o conteúdo de `publish/win-x64` para distribuir. Essa versão contém o runtime e executa diretamente pelo arquivo `Target.Desafio.exe`.
+Compacte todo o conteúdo de `publish/win-x64` para distribuir. Essa versão contém o runtime e executa diretamente pelo arquivo `Desafio.Estoque.exe`.
