@@ -1,0 +1,31 @@
+name: Publicar versão Windows
+on:
+  workflow_dispatch:
+    inputs:
+      versao:
+        description: Tag da versão
+        required: true
+        default: v1.1.0
+permissions:
+  contents: write
+jobs:
+  publicar:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: '8.0.x'
+      - run: dotnet test tests/Desafio.Estoque.Tests/Desafio.Estoque.Tests.csproj --configuration Release
+      - run: dotnet publish src/Desafio.Estoque/Desafio.Estoque.csproj --configuration Release --runtime win-x64 --self-contained true --output publish/win-x64
+      - name: Compactar executável e dados
+        run: |
+          cd publish/win-x64
+          zip -r ../../desafio-estoque-win-x64.zip .
+      - name: Publicar release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.versao }}
+        run: |
+          [[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "Tag inválida."; exit 1; }
+          gh release create "$VERSION" desafio-estoque-win-x64.zip --target "$GITHUB_SHA" --title "$VERSION — Desafio Estoque C#" --notes "Aplicação de estoque, comissões e juros em C#/.NET 8. Baixe o ZIP, extraia todos os arquivos e execute Desafio.Estoque.exe. Inclui o runtime do .NET para Windows 64 bits e os arquivos de dados." --latest
